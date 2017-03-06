@@ -1,0 +1,52 @@
+
+form.thing-form .id,
+div.thing-list .id,
+form.image-form .id,
+div.image-list .id {
+  display: none;
+}
+
+sd-image-editor form,
+sd-thing-editor form {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.admin-zone {
+  border: solid 1px #e7e7e7;
+  background-color: #ffff55;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.admin-zone h3 {
+  margin-top: 0;
+}
+
+/* Tag Box */
+.tag-box {
+  margin-bottom: 24px;
+}
+
+.tag-box .content {
+  background-color: #f8f8f8;
+}
+
+.tag-box .thing-list {
+  height: 200px;
+  padding:12px 0;
+  overflow: auto;
+}
+
+.tag-box .title {
+  background-color: rgba(0,0,0,0.8);
+  width:100%;
+  color: white;
+  font-size: 2em;
+  padding: 0 12px;
+}
+
+.tag-box .link-things {
+  padding: 6px;
+  border-top: solid 1px #e7e7e7;
+}

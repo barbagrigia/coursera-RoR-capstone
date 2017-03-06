@@ -1,0 +1,23 @@
+{
+  "name": "coursera-ror-capstone",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    «vtrukhin <vtruhin@yandex.ru>"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery2": "^2.0.0",
+    "bootstrap-sass": "^3.3.7",
+    "angular": "^1.6.0",
+    "angular-ui-router": "^0.3.2",
+    "angular-resource": "^1.6.0"
+  }
+}

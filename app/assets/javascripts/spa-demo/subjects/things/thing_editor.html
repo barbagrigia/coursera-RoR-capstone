@@ -1,0 +1,115 @@
+<form class="thing-form row" name="thingform">
+  <span class="thing_id id">{{$ctrl.item.id}}</span>
+  <span class="invalid">{{$ctrl.item.errors.full_messages}}</span>
+
+  <div class="thing-name row col-lg-12">
+    <label class="col-xs-3">Name:</label>
+    <input class="col-xs-9"
+           name="thing-name" 
+           data-ng-model="$ctrl.item.name" 
+           ng-readonly="!$ctrl.authz.canUpdate"
+           required="required"
+           maxlength="40"
+           pattern=".{3,}" title="3 character minimum for Name"/>
+    <span class="invalid">{{$ctrl.item.errors.name}}</span>
+  </div>
+
+  <div class="thing-desc row col-lg-12"
+       ng-show="thingform.$valid">
+    <label class="col-xs-3">Description:</label>
+    <textarea class="col-xs-9"
+           name="thing-desc" 
+           ng-model="$ctrl.item.description" 
+           ng-readonly="!$ctrl.authz.canUpdate"
+           type="text"
+           size="80"
+           maxlength="4000"/>
+    <span class="invalid">{{$ctrl.item.errors.description}}</span>
+  </div>
+
+  <div class="thing-notes row col-lg-12"
+       ng-show="$ctrl.authz.canGetDetails && thingform.$valid">
+    <label class="col-xs-3">Notes:</label>
+    <textarea class="col-xs-9"
+           name="thing-notes" 
+           ng-model="$ctrl.item.notes" 
+           ng-readonly="!$ctrl.authz.canUpdate"
+           type="text"
+           size="80"
+           maxlength="4000"/>
+    <span class="invalid">{{$ctrl.item.errors.notes}}</span>
+  </div>
+
+  <div class="thing-images row col-lg-12">
+    <label class="col-xs-3">Related Images:</label>
+    <ul class="thing-images col-xs-9">
+      <li ng-repeat="ti in $ctrl.images | orderBy:'priority'">
+        <input type="checkbox"               
+               name="image-delete"
+               ng-model="ti.toRemove"
+               ng-show="$ctrl.authz.canRemoveImage"
+               value="{{ti.id}}">
+        <div class="image-delete glyphicon glyphicon-remove"
+             ng-show="ti.toRemove"></div>
+        <input type="number"
+               name="image-priority"
+               min="0"
+               max="9"
+               ng-show="$ctrl.authz.canUpdateImage && !ti.toRemove"
+               ng-model="ti.priority">
+        <div class="glyphicon glyphicon-asterisk"
+             ng-hide="ti.originalPriority==ti.priority || ti.toRemove"></div>
+        <a data-ui-sref="images({id:ti.image_id})">
+          <img style="width: 50px"            
+             ng-src="{{ti.image_content_url}}?width=50"/>
+          <span class="id image_id">{{ti.image_id}}</span>
+          <label class="image-caption"
+                 ng-show="ti.image_caption">{{ti.image_caption}}</label>
+          <label class="image-caption"
+                 ng-hide="ti.image_caption">(no caption {{ti.image_id}})</label>
+        </a>
+      </li>
+    </ul>
+    <span class="invalid">{{$ctrl.item.errors.images}}</span>
+  </div>
+
+  <div class="thing-controls"
+       ng-show="$ctrl.authz.authenticated">
+    <button ng-show="!$ctrl.item.id && $ctrl.authz.canCreate"
+            name="thing-create"
+            ng-disabled="thingform.$invalid"
+            type="submit"
+            ng-click="$ctrl.create()">Create Thing</button>
+
+    <div ng-show="$ctrl.item.id">
+      <span class="thing-modify"
+            data-ng-hide="!$ctrl.authz.canUpdate &&
+                          !$ctrl.authz.canUpdateImage &&
+                          !$ctrl.authz.canRemoveImage">
+        <button name="thing-update"
+                type="submit"          
+                ng-disabled="thingform.$invalid || !thingform.$dirty"
+                data-ng-hide="$ctrl.haveDirtyLinks() &&
+                  (!thingform['thing-name'].$dirty && 
+                   !thingform['thing-desc'].$dirty && 
+                   !thingform['thing-notes'].$dirty)"
+                ng-click="$ctrl.update()">Update Thing</button>
+        <button name="thing-images-update"
+                type="submit"          
+                data-ng-show="$ctrl.haveDirtyLinks() &&
+                  (!thingform['thing-name'].$dirty && 
+                   !thingform['thing-desc'].$dirty && 
+                   !thingform['thing-notes'].$dirty)"
+                ng-click="$ctrl.updateImageLinks()">Update Image Links</button>        
+      </span>
+
+      <button name="thing-delete"
+              type="submit"
+              ng-show="$ctrl.authz.canDelete" 
+              ng-click="$ctrl.remove()">Delete Thing</button>
+      <button name="image-clear"
+              type="submit"
+              ng-click="$ctrl.clear()">Clear Thing</button>
+    </div>
+  </div>
+</form>

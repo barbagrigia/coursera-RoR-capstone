@@ -1,0 +1,48 @@
+<div class="tag-box col-sm-6 col-md-4">
+  <div class="content">
+    <div class="title">
+      {{$ctrl.tag.name}}
+    </div>
+    <!-- List of things associated to this tag -->
+    <div class="thing-list">
+      <ul>
+        <li ng-repeat="thing in $ctrl.things">
+          <a ui-sref="things({id:thing.id})">{{thing.thing_name}}</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Organizers only: Add a tthing to this category -->
+    <div class="link-things" ng-if="$ctrl.authz.canGetLinkables()">
+      <form class="form-inline" name="addThing" ng-if="$ctrl.linkableThings.length > 0">
+        <select class="" name="" ng-model="$ctrl.selectedThing" required>
+          <option ng-repeat="option in $ctrl.linkableThings" ng-value="option.id">
+            {{option.thing_name}}
+          </option>
+        </select>
+        <button type="submit" class="btn btn-default" ng-click="$ctrl.addToCategory()" ng-disabled="addThing.$invalid">
+          Add to this category
+        </button>
+      </form>
+      <p ng-if="$ctrl.thingsAuthz.canCreate()"><a ui-sref="things()">Create a thing</a></p>
+    </div>
+    <!-- Admin only: update name of a category or remove it -->
+    <div class="admin-zone" ng-if="$ctrl.authz.canCreate()">
+      <form class="form-inline" name="updateName">
+        <div class="form-group">
+          <input type="text"
+                 class="form-control"
+                 id="tag_name"
+                 ng-model="$ctrl.newTagName"
+                 name="tag_name"
+                 placeholder="New category name"
+                 required>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="$ctrl.update()" ng-disabled="updateName.$invalid">
+          Change name
+        </button>
+        <button class="btn btn-danger" ng-click="$ctrl.remove()">
+          Delete
+        </button>
+    </div>
+  </div>
+</div>

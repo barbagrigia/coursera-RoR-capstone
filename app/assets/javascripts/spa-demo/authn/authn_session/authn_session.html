@@ -1,0 +1,55 @@
+<div ng-hide="$ctrl.getCurrentUser()">
+  <form id="login-form"
+        name="login_form"
+        ng-submit="$ctrl.login()">
+
+    <div class="form-group">
+      <div id="login-email">
+        <label>email</label>
+        <input type="email" 
+               name="login_email" 
+               ng-model="$ctrl.loginForm.email" 
+               required="required"/>
+      </div>
+
+      <div id="login-password">
+        <label>password</label>
+        <input type="password" 
+               name="login_password" 
+               ng-model="$ctrl.loginForm.password" 
+               required="required"/>
+      </div>
+    </div>
+
+    <div id="login-submit">
+      <span class="invalid"
+            ng-hide="login_form.$dirty">{{$ctrl.loginForm.errors.full_messages}}</span>
+
+      <button class="btn btn-default"
+              ng-disabled="login_form.$invalid"
+              name="login_submit"
+              type="submit" >Login</button>
+    </div>
+
+    <div id="new-account">
+      <label>New here?</label>
+      <a ui-sref="accountSignup" class="initialism">Sign Up</a>
+    </div>    
+  </form>
+</div>
+
+<div ng-show="$ctrl.getCurrentUser()">
+  <form id="logout-form" 
+        ng-submit="$ctrl.logout()">
+    <span id="user_id" 
+          class="id"
+          ng-if="$ctrl.getCurrentUser()">{{$ctrl.getCurrentUser().id}}</span>
+
+    <div id="logout-identity">
+      <label>{{$ctrl.getCurrentUserName()}}</label>
+      <button type="submit" 
+              name="logout_submit"
+              class="btn btn-default">Logout</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,17 @@
+<div class="admin-zone xs-12" ng-if="$ctrl.authz.canCreate()">
+  <h3>Administration</h3>
+  <form class="form-inline" name="addCat">
+    <div class="form-group">
+      <input type="text"
+             class="form-control"
+             id="tag_name"
+             ng-model="$ctrl.newTagName"
+             name="tag_name"
+             placeholder="New category name"
+             required>
+    </div>
+    <button type="submit" class="btn btn-default" ng-click="$ctrl.create()" ng-disabled="addCat.$invalid">
+      Create new category
+    </button>
+  </form>
+</div>

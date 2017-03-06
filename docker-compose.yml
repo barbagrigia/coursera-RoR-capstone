@@ -1,0 +1,71 @@
+version: '2'
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD
+  mongo:
+    image: mongo
+  railsvm:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - mongo
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD
+      - MONGO_HOST=mongo:27017
+  rake:
+      build: .
+      command: docker/docker-rake-commands.sh
+      volumes:
+        - .:/myapp
+      depends_on:
+        - postgres
+        - mongo
+      links:
+        - selenium
+      ports:
+        - "3010:3010"
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_HOST=postgres
+        - POSTGRES_PASSWORD
+        - MONGO_HOST=mongo:27017
+        - VNC_PASSWORD=password
+        - APP_PORT=3010
+        - SELENIUM_REMOTE_HOST=selenium
+        - COVERAGE
+  test:
+      build: .
+      command: docker/docker-test-commands.sh
+      volumes:
+        - .:/myapp
+      depends_on:
+        - postgres
+        - mongo
+      links:
+        - selenium
+      ports:
+        - "3010:3010"
+        - "5900:5900"
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_HOST=postgres
+        - POSTGRES_PASSWORD
+        - MONGO_HOST=mongo:27017
+        - VNC_PASSWORD=password
+        - APP_PORT=3010
+        - SELENIUM_REMOTE_HOST=selenium
+  selenium:
+#    image: selenium/standalone-firefox-debug:2.47.1
+    image: selenium/standalone-chrome-debug:2.47.1
+    ports:
+      - "4444:4444"
+      - "5901:5900"
