@@ -6,8 +6,9 @@ class ThingImagesController < ApplicationController
   before_action :get_image, only: [:image_things]
   before_action :get_thing_image, only: [:update, :destroy]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:subjects]
   #after_action :verify_policy_scoped, only: [:linkable_things]
+  before_action :origin, only: [:subjects]
 
   def index
     authorize @thing, :get_images?
@@ -17,7 +18,7 @@ class ThingImagesController < ApplicationController
   def image_things
     authorize @image, :get_things?
     @thing_images=@image.thing_images.prioritized.with_name
-    render :index 
+    render :index
   end
 
   def linkable_things
@@ -29,6 +30,29 @@ class ThingImagesController < ApplicationController
     @things=ThingPolicy::Scope.new(current_user,@things).user_roles(true,false)
     @things=ThingPolicy.merge(@things)
     render "things/index"
+  end
+
+  def subjects
+    expires_in 1.minute, :public=>true
+    miles=params[:miles] ? params[:miles].to_f : nil
+    subject=params[:subject]
+    distance=params[:distance] ||= "false"
+    reverse=params[:order] && params[:order].downcase=="desc"  #default to ASC
+    last_modified=ThingImage.last_modified
+    state="#{request.headers['QUERY_STRING']}:#{last_modified}"
+    #use eTag versus last_modified -- ng-token-auth munges if-modified-since
+    eTag="#{Digest::MD5.hexdigest(state)}"
+
+    if stale?  :etag=>eTag
+      @thing_images=ThingImage.within_range(@origin, miles, reverse)
+        .with_name
+        .with_caption
+        .with_position
+      @thing_images = @thing_images.with_tag(params[:tag_id]) if params[:tag_id]
+      @thing_images=@thing_images.things    if subject && subject.downcase=="thing"
+      @thing_images=ThingImage.with_distance(@origin, @thing_images) if distance.downcase=="true"
+      render "thing_images/index"
+    end
   end
 
   def create
@@ -65,6 +89,7 @@ class ThingImagesController < ApplicationController
 
   def destroy
     authorize @thing, :remove_image?
+    @thing_image.image.touch #image will be only thing left
     @thing_image.destroy
     head :no_content
   end
@@ -89,5 +114,15 @@ class ThingImagesController < ApplicationController
     end
     def thing_image_update_params
       params.require(:thing_image).permit(:priority)
+    end
+
+    def origin
+      case
+      when params[:lng] && params[:lat]
+        @origin=Point.new(params[:lng].to_f, params[:lat].to_f)
+      else
+        raise ActionController::ParameterMissing.new(
+          "an origin [lng/lat] required")
+      end
     end
 end

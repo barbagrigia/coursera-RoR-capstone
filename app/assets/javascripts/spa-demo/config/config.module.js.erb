@@ -5,6 +5,7 @@
     .module("spa-demo.config", [])
     .constant("spa-demo.config.APP_CONFIG", {
       server_url: "<%= ENV['RAILS_API_URL'] %>",
+      default_position: {"lng":-76.61183685064316, "lat":39.28583496489344},
 
       main_page_html: "<%= asset_path('spa-demo/pages/main.html') %>",
       signup_page_html: "<%= asset_path('spa-demo/pages/signup_page.html') %>",
@@ -12,8 +13,17 @@
       images_page_html: "<%= asset_path('spa-demo/pages/images_page.html') %>",
       things_page_html: "<%= asset_path('spa-demo/pages/things_page.html') %>",
       tags_page_html: "<%= asset_path('spa-demo/pages/tags_page.html') %>",
+      subjects_page_html: "<%= asset_path('spa-demo/pages/subjects_page.html') %>",
 
       navbar_html: "<%= asset_path('spa-demo/layout/navbar/navbar.html') %>",
+      tabs_html: "<%= asset_path('spa-demo/layout/tabs/tabs.html') %>",
+      tab_html: "<%= asset_path('spa-demo/layout/tabs/tab.html') %>",
+      areas_html: "<%= asset_path('spa-demo/layout/areas/areas.html') %>",
+      area_html: "<%= asset_path('spa-demo/layout/areas/area.html') %>",
+
+      current_origin_selector_html: "<%= asset_path('spa-demo/geoloc/current_origin/current_origin_selector.html') %>",
+      image_loader_html: "<%= asset_path('spa-demo/layout/image_loader/image_loader.html') %>",
+      image_viewer_html: "<%= asset_path('spa-demo/layout/image_viewer/image_viewer.html') %>",
       authn_session_html: "<%= asset_path('spa-demo/authn/authn_session/authn_session.html') %>",
       authn_signup_html: "<%= asset_path('spa-demo/authn/signup/signup.html') %>",
       foos_html: "<%= asset_path('spa-demo/foos/foos.html') %>",
@@ -21,9 +31,23 @@
       image_editor_html: "<%= asset_path('spa-demo/subjects/images/image_editor.html') %>",
       thing_editor_html: "<%= asset_path('spa-demo/subjects/things/thing_editor.html') %>",
       thing_selector_html: "<%= asset_path('spa-demo/subjects/things/thing_selector.html') %>",
+
       tag_list_html: "<%= asset_path('spa-demo/subjects/tags/taglist.html') %>",
       tag_form_html: "<%= asset_path('spa-demo/subjects/tags/tag_form.html') %>",
       tag_box_html: "<%= asset_path('spa-demo/subjects/tags/tag_box.html') %>",
+      find_by_tag_html: "<%= asset_path('spa-demo/pages/find_by_tag_page.html')%>",
+      current_tag_html: "<%= asset_path('spa-demo/subjects/current_tags/current_tags.html')%>",
+
+      current_images_html: "<%= asset_path('spa-demo/subjects/current_images/current_images.html') %>",
+      current_image_viewer_html: "<%= asset_path('spa-demo/subjects/current_images/current_image_viewer.html') %>",
+      current_things_html: "<%= asset_path('spa-demo/subjects/current_things/current_things.html') %>",
+      current_thing_info_html: "<%= asset_path('spa-demo/subjects/current_things/current_thing_info.html') %>",
+
+      optimized_markers: <%= ENV['OPTIMIZED_MARKERS']!=nil && ENV['OPTIMIZED_MARKERS'].downcase=='true' %>,
+      origin_marker: "<%= asset_path('spa-demo/geoloc/markers/marker-red-32x44.png') %>",
+      thing_marker: "<%= asset_path('spa-demo/geoloc/markers/marker-black-32x44.png') %>",
+      secondary_marker: "<%= asset_path('spa-demo/geoloc/markers/marker-grey-32x44.png') %>",
+      orphan_marker: "<%= asset_path('spa-demo/geoloc/markers/marker-yellow-32x44.png') %>",
     });
 
 })();

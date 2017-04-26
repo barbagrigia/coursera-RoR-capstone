@@ -2,6 +2,29 @@
   <span class="image_id id">{{$ctrl.item.id}}</span>
   <span class="invalid">{{$ctrl.item.errors.full_messages}}</span>
 
+  <div class="image-content row col-lg-12">
+    <label class="col-xs-3"></label>
+    <div class="col-xs-12 col-sm-9 image-rendering">  
+      <div class="image-existing">
+        <img class="img-responsive img-rounded" 
+             style="width: 250px"             
+             ng-src="{{$ctrl.item.content_url}}?width=250"
+             ng-if="$ctrl.item.content_url" />
+      </div>  
+
+      <sd-image-loader
+            class="image-select"
+            result-data-uri="$ctrl.setImageContent(dataUri)"
+            ng-if="!$ctrl.item.id && $ctrl.authz.canCreate">
+          <span class="invalid"
+                ng-show="imageform['image-file'].$error.maxSize"
+                >image size is too large (max=10MB)</span>          
+      </sd-image-loader>      
+      <span class="invalid">{{$ctrl.item.errors.content_type}}</span>
+      <span class="invalid">{{$ctrl.item.errors.content}}</span>      
+    </div>
+  </div>
+
   <div class="image-caption row col-lg-12">
     <label class="col-xs-3">Caption:</label>
     <input class="col-xs-9"
@@ -26,6 +49,26 @@
     <span class="invalid">{{$ctrl.item.errors.thing_images}}</span>
   </div>
 
+  <div class="image-location row col-lg-12" >
+    <label class="col-xs-3">Position:</label>
+    <div class="col-sm-9 col-xs-12" ng-show="$ctrl.item.position">
+      <label>lng: </label><span class="lng">{{$ctrl.item.position.lng}}</span>
+      <label>lat: </label><span class="lat">{{$ctrl.item.position.lat}}</span>
+    </div>
+  </div>
+
+  <div class="image-geocode row col-lg-12">
+    <label class="col-xs-3" ng-show="$ctrl.authz.canUpdate">Use Address:</label>
+    <input class="col-xs-9"
+           name="image-address" 
+           data-ng-model="$ctrl.address" 
+           ng-show="$ctrl.authz.canUpdate"
+           ng-blur="$ctrl.locationByAddress($ctrl.address)"/>
+    <label class="col-xs-3"></label>
+    <div class="formatted_address">{{$ctrl.location.formatted_address}}</div>
+    <span class="invalid">{{$ctrl.location.errors}}</span>
+  </div>
+
   <div class="linkable-things row col-lg-12"
        ng-show="$ctrl.linkable_things.length>0 &&
                 $ctrl.authz.authenticated">
@@ -46,7 +89,7 @@
       <button name="image-create"
               ng-show="!$ctrl.item.id && $ctrl.authz.canCreate"
               type="submit"
-              ng-disabled="imageform.$invalid"
+              ng-disabled="imageform.$invalid || !$ctrl.item.image_content.content"
               ng-click="$ctrl.create()">Create Image</button>
 
       <span ng-show="$ctrl.item.id">

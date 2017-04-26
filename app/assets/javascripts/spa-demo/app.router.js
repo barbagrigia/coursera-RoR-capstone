@@ -12,10 +12,8 @@
   function RouterFunction($stateProvider, $urlRouterProvider, APP_CONFIG) {
     $stateProvider
     .state("home",{
-      url: "/",
-      templateUrl: APP_CONFIG.main_page_html,
-      // controller: ,
-      // controllerAs: ,
+      url: "/subjects",
+      templateUrl: APP_CONFIG.subjects_page_html
     })
     .state("accountSignup",{
       url: "/signup",
@@ -33,12 +31,22 @@
       url: "/things/:id",
       templateUrl: APP_CONFIG.things_page_html
     })
+
     .state("tags", {
       url: "/tags/:id",
       templateUrl: APP_CONFIG.tags_page_html
     })
+    .state("findByTag", {
+      url: "/find_by_cat",
+      templateUrl: APP_CONFIG.find_by_tag_html
+    })
+    .state("foos",{
+      url: "/foos",
+      templateUrl: APP_CONFIG.main_page_html
+    })
     ;
 
-    //$urlRouterProvider.otherwise("/"); eliminate default route
+
+    //$urlRouterProvider.otherwise("/subjects");
   }
 })();

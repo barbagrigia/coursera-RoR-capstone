@@ -1,0 +1,8 @@
+.find-by-tag-page .area-pane .categories {
+  height: 42vh;
+  overflow-y: auto;
+}
+
+.find-by-tag-page h2 {
+  margin: 5px 0;
+}

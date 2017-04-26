@@ -1,0 +1,11 @@
+<div class="tabs-pane">
+  <ul class="tab-label nav nav-pills" role="tablist">
+    <li ng-repeat="tab in $ctrl.tabs"
+        ng-class="{active: tab.selected}">
+      <a role="tab"
+         ng-click="$ctrl.selectTab(tab)">{{tab.label}}</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" ng-transclude></div>
+</div>

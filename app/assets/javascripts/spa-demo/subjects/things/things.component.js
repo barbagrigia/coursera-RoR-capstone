@@ -48,7 +48,6 @@
     vm.updateImageLinks = updateImageLinks;
 
     vm.$onInit = function() {
-      console.log("ThingEditorController",$scope);
       $scope.$watch(function(){ return Authz.getAuthorizedUserId(); },
                     function(){
                       if ($stateParams.id) {
@@ -69,7 +68,7 @@
 
     function reload(thingId) {
       var itemId = thingId ? thingId : vm.item.id;
-      console.log("re/loading thing", itemId);
+
       vm.images = ThingImage.query({thing_id:itemId});
       vm.item = Thing.get({id:itemId});
       vm.thingsAuthz.newItem(vm.item);
@@ -95,7 +94,7 @@
       vm.item.errors = null;
       vm.item.$save().then(
         function(){
-          console.log("thing created", vm.item);
+          //console.log("thing created", vm.item);
           $state.go(".",{id:vm.item.id});
         },
         handleError);
@@ -112,7 +111,7 @@
       updateImageLinks(update);
     }
     function updateImageLinks(promise) {
-      console.log("updating links to images");
+      //console.log("updating links to images");
       var promises = [];
       if (promise) { promises.push(promise); }
       angular.forEach(vm.images, function(ti){
@@ -123,10 +122,11 @@
         }
       });
 
-      console.log("waiting for promises", promises);
+      //console.log("waiting for promises", promises);
       $q.all(promises).then(
         function(response){
-          console.log("promise.all response", response);
+          //console.log("promise.all response", response);
+
           //update button will be disabled when not $dirty
           $scope.thingform.$setPristine();
           reload();
@@ -137,7 +137,7 @@
     function remove() {
       vm.item.$remove().then(
         function(){
-          console.log("thing.removed", vm.item);
+          //console.log("thing.removed", vm.item);
           clear();
         },
         handleError);
@@ -164,7 +164,8 @@
     var vm=this;
 
     vm.$onInit = function() {
-      console.log("ThingSelectorController",$scope);
+
+      //console.log("ThingSelectorController",$scope);
       $scope.$watch(function(){ return Authz.getAuthorizedUserId(); },
                     function(){
                       if (!$stateParams.id) {

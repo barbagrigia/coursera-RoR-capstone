@@ -20,24 +20,27 @@
           <ul class="dropdown-menu">
             <li ui-sref-active="active">
                 <a ui-sref="authn">Authentication Check</a></li>
-            <li ui-sref-active="active">
+            <li ui-sref-active="{'active': 'images'}">
                 <a ui-sref="images({id:null})">Images</a></li>
-            <li ui-sref-active="active">
+            <li ui-sref-active="{'active': 'things'}">
                 <a ui-sref="things({id:null})">Things</a></li>
             <li ui-sref-active="active">
               <a ui-sref="tags({id:null})">Categories</a>
+            </li>
+            <li ui-sref-active="active">
+              <a ui-sref="home">Subjects</a>
+            </li>
+            <li ui-sref-active="active">
+              <a ui-sref="findByTag">Find by category</a>
             </li>
           </ul>
 
         </li>
       </ul>
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
 
+      <span class="origin-control navbar-left">
+        <sd-current-origin-selector></sd-current-origin-selector>
+      </span>
 
       <ul class="nav navbar-nav navbar-right">
         <li id="login-dropdown" class="dropdown">
